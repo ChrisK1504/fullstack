@@ -19,6 +19,7 @@ const App = () => {
   const emptyVotes = Array(anecdotes.length).fill(0)
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(emptyVotes)
+  const [mostVoted, setMostVoted] = useState(0)
 
   console.log(votes, selected);
   
@@ -31,16 +32,21 @@ const App = () => {
   const addVote = () => {
     const copy = [...votes]
     copy[selected] += 1
+    if (copy[selected] > copy[mostVoted]) setMostVoted(selected)
     setVotes(copy)
   }
 
   return (
     <div>
-
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <Button onClick={addVote} label={"vote"} />
       <Button onClick={nextAnecdote} label={"next anecdote"}/>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[mostVoted]}</p>
+      <p>has {votes[mostVoted]} votes</p>
+
     </div>
   )
 }
