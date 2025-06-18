@@ -19,7 +19,7 @@ const App = () => {
         setPersons(result.data)
       })
   }
-  
+
   console.log("Effect in use")
   useEffect(loadPersonsHook, [])
 
@@ -31,11 +31,13 @@ const App = () => {
       const newPersonObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1
       }
 
-      console.log(newPersonObject, persons);
-      setPersons(persons.concat(newPersonObject))
+      axios
+        .post('http://localhost:3001/persons', newPersonObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+        })
     }
   }
 
