@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import axios from 'axios'
+import PersonsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,18 +11,15 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
-
-  const loadPersonsHook = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(result => {
-        console.log("Promise fulfilled")
-        setPersons(result.data)
+  useEffect(() => {
+    PersonsService
+      .getAll()
+      .then(initialPerson => {
+        console.log(initialPerson)
+        setPersons(initialPerson)
       })
-  }
 
-  console.log("Effect in use")
-  useEffect(loadPersonsHook, [])
+  }, [])
 
   const addNewPerson = (event) => {
     event.preventDefault()
@@ -33,10 +31,10 @@ const App = () => {
         number: newNumber,
       }
 
-      axios
-        .post('http://localhost:3001/persons', newPersonObject)
-        .then(response => {
-          setPersons(persons.concat(response.data))
+      PersonsService
+        .create(newPersonObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
         })
     }
   }
