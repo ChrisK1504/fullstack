@@ -8,17 +8,26 @@ const App = () => {
 
   const addNewPerson = (event) => {
     event.preventDefault()
-    const newPersonObject = {
-      name: newName,
-    }
+    if (nameExists(persons) === true) {
+      alert(`${newName} is already in phonebook`)
+    } else {
+      const newPersonObject = {
+        name: newName,
+      }
 
-    console.log(newPersonObject, persons);
-    setPersons(persons.concat(newPersonObject))
+      console.log(newPersonObject, persons);
+      setPersons(persons.concat(newPersonObject))
+    }
   }
 
   const handleInputChange = (event) => {
     console.log(event.target.value);
     setNewName(event.target.value)
+  }
+
+  const nameExists = (persons) => {
+    const found = persons.find(person => person.name === newName)
+    return found !== undefined ? true : false
   }
 
   return (
@@ -33,7 +42,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <p key={person.name}>{person.name}</p>)}
+      {persons.map(person => <p key={person}>{person.name}</p>)}
     </div>
   )
 }
