@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState('')
+  const [successful, setSuccessful] = useState(true)
 
   useEffect(() => {
     PersonsService
@@ -40,10 +41,20 @@ const App = () => {
             setNewName('')
             setNewNumber('')
 
+            setSuccessful(true)
             setMessage(`Changed number for ${newPersonObject.name}`)
             setTimeout(() => {
               setMessage('')
-            }, 3000)
+            }, 5000)
+          })
+          .catch(error => {
+            setPersons(persons.filter(p => p.id !== personId))
+
+            setSuccessful(false)
+            setMessage(`Information of ${newName} has already been removed from server`)
+            setTimeout(() => {
+              setMessage('')
+            }, 5000)
           })
       }
     } else {
@@ -59,6 +70,7 @@ const App = () => {
           setNewName('')
           setNewNumber('')
 
+          setSuccessful(true)
           setMessage(`Added ${newPersonObject.name}`)
           setTimeout(() => {
             setMessage('')
@@ -103,12 +115,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Message message={message} />
+      <Message message={message} successful={successful} />
       <Filter filter={filter} inputHandler={handleFilterChange} />
       <h3>Add a new</h3>
       <PersonForm addNewPerson={addNewPerson} newName={newName} newNumber={newNumber} handleNameInputChange={handleNameInputChange} handleNumberInputChange={handleNumberInputChange} />
       <h2>Numbers</h2>
-      {persons.map(person => <Person key={person.id} person={person} removePersonButtonHandler={() => removePerson(person)} />)}
+      {personsToShow.map(person => <Person key={person.id} person={person} removePersonButtonHandler={() => removePerson(person)} />)}
     </div>
   )
 }
