@@ -25,13 +25,21 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const showCountry = (name) => {
+    setFilter(name.toLowerCase())
+  }
+
   const countriesToShow = countries.filter(c => c.name.common.toLowerCase().includes(filter) === true)
 
   return (
     <div>
       find countries <input value={filter} onChange={handleFilterChange} />
       <p>{countriesToShow.length > 10 ? 'Too many matches, specify another filter' : ''}</p>
-      {countriesToShow.length < 10 ? countriesToShow.length === 1 ? <Country country={countriesToShow[0]} /> : countriesToShow.map(c => <li key={c['cca2']}>{c.name.common}</li>) : ''}
+      {countriesToShow.length < 10 ?
+        countriesToShow.length === 1 ?
+          <Country country={countriesToShow[0]} /> :
+          countriesToShow.map(c => <div><li key={c['cca2']}>{c.name.common} <button onClick={() => showCountry(c.name.common)}>Show</button></li></div>) :
+        ''}
     </div>
   )
 
