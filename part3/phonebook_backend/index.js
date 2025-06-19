@@ -1,8 +1,12 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
-app.use(express.json())
+morgan.token('body', function (req) { return JSON.stringify(req.body) })
 
+
+app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons =
   [
@@ -62,6 +66,7 @@ app.delete('/api/persons/:id', (req, res) => {
   res.status(204).end()
 })
 
+
 app.post('/api/persons', (req, res) => {
   const newId = Math.trunc((Math.random() * 100)).toString()
   const body = req.body
@@ -84,8 +89,6 @@ app.post('/api/persons', (req, res) => {
       error: 'name must be unique'
     })
   }
-
-
 
   const newPerson = {
     id: newId,
