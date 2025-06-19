@@ -1,9 +1,9 @@
-const Persons = ({ persons }) => {
+const Person = ({ person, removePersonButtonHandler }) => {
   return (
     <div>
-      {persons.map((person) => <p key={person.id}>{person.name} {person.number}</p>)}
+      {person.name} {person.number} <button onClick={removePersonButtonHandler}>delete</button>
     </div>
   )
 }
 
-export default Persons
+export default Person
